@@ -1,6 +1,6 @@
 const PROVIDER_OP = "https://opt-mainnet.g.alchemy.com/v2/MnmlgcGeD8FPWiy_0SHlubv1htTHIB1g";
 const API_OP_CONTRACT = 'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&apikey=A7YUEGDPZD2DD2G784BNDKK1WZBBQP7D4X&address=';
-const CONTRACT_ADDR = "0x80fe12c1076d2b708D6495186690f6D275740D44";
+const CONTRACT_ADDR = "0x76c9fb6ae4151e00bbdbf9B771CF84DE42a31636";
 
 let web3 = new Web3(PROVIDER_OP);
 let url = API_OP_CONTRACT + CONTRACT_ADDR;
