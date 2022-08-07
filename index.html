@@ -14,16 +14,23 @@
       <!-- header -->
       <h1 class='text-center text-white my-3'>🐻 Oppa Bear Pixel</h1>
 
-      <!-- input jigsaw id -->
-      <div class="input-group input-group-lg mb-3">
-        <input id="jigsaw_id" type="number" min="1" max="2000" class="form-control" placeholder="Enter Oppa Bear ID" aria-label="Enter Oppa Bear ID" aria-describedby="btn-resolve">
-        <button class="btn btn-info" type="button" id="btn-resolve"><i class="bi bi-search"></i></button>
-      </div>
-
-      <!-- input jigsaw id -->
-      <div class="input-group input-group-lg mb-3">
-        <input id="wallet_addr" type="text" class="form-control" placeholder="Wallet Address" aria-label="Wallet Address" aria-describedby="btn-clipboard">
-        <button class="btn btn-info" type="button" id="btn-clipboard"><i class="bi bi-clipboard"></i></button>
+      <div class='row'>
+        <div class='col-sm'>
+          <!-- input jigsaw id -->
+          <div class="input-group input-group-lg mb-3">
+            <input id="jigsaw_id" type="number" min="0" max="99" class="form-control" placeholder="Enter Jigsaw ID" aria-label="Enter Jigsaw ID" aria-describedby="btn-resolve">
+            <button class="btn btn-info" type="button" id="btn-resolve"><i class="bi bi-search"></i></button>
+          </div>
+          <!-- wallet address -->
+          <div class="input-group input-group-lg mb-3">
+            <input id="wallet_addr" type="text" class="form-control" placeholder="Wallet Address" aria-label="Wallet Address" aria-describedby="btn-clipboard">
+            <button class="btn btn-info" type="button" id="btn-clipboard"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+        <div class='col-sm'>
+          <!-- preview img -->
+          <img class='img-thumbnail' />
+        </div>
       </div>
 
     </div>

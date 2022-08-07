@@ -1,6 +1,7 @@
 const PROVIDER_OP = "https://opt-mainnet.g.alchemy.com/v2/MnmlgcGeD8FPWiy_0SHlubv1htTHIB1g";
 const API_OP_CONTRACT = 'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&apikey=A7YUEGDPZD2DD2G784BNDKK1WZBBQP7D4X&address=';
 const CONTRACT_ADDR = "0x76c9fb6ae4151e00bbdbf9B771CF84DE42a31636";
+const IMG_UNREVEAL = "https://quixotic.io/_next/image?url=https%3A%2F%2Ffanbase-1.s3.amazonaws.com%2Fquixotic-collection-profile%2Fprofile_MuHtSRm.gif&w=3840&q=75";
 
 let web3 = new Web3(PROVIDER_OP);
 let url = API_OP_CONTRACT + CONTRACT_ADDR;
@@ -23,6 +24,7 @@ $.getJSON(url, data => {
 
 function freeze() {
   $('#wallet_addr').val('.....');
+  $('.img-thumbnail').attr('src', IMG_UNREVEAL);
   $('#btn-resolve').attr('disabled', true);
   $('#btn-resolve').removeClass('btn-info');
   $('#btn-resolve').addClass('btn-warning');
@@ -35,6 +37,23 @@ function unfreeze() {
   $('#jigsaw_id').focus();
 }
 
+// resolve logic
+function resolve_img_url(jid) {
+  return `https://ipfs.io/ipfs/bafybeigdvfikmbvkvtfamfnpc7i4ytshmtjjvomnqavdgrrkzjafx6witm/${jid}.png`;
+}
+function resolve_img(jid) {
+  let url = resolve_img_url(jid);
+  $('.img-thumbnail').attr('src', url);
+}
+function resolve_wallet_addr(jid) {
+  mmsjs.methods.ownerOf(jid).call().then(addr => {
+    unfreeze();
+    $('#wallet_addr').val(addr);
+  }).catch(msg => {
+    alert(msg);
+  });
+}
+
 // resolve button
 let latest_jid = null;
 $('#btn-resolve').click(_ => {
@@ -45,12 +64,8 @@ $('#btn-resolve').click(_ => {
   latest_jid = jid;
 
   freeze();
-  mmsjs.methods.ownerOf(jid).call().then(addr => {
-    unfreeze();
-    $('#wallet_addr').val(addr);
-  }).catch(msg => {
-    alert(msg);
-  });
+  resolve_img(jid);
+  resolve_wallet_addr(jid);
 });
 
 // bind enter
