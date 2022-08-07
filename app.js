@@ -1,6 +1,8 @@
 const PROVIDER_OP = "https://opt-mainnet.g.alchemy.com/v2/MnmlgcGeD8FPWiy_0SHlubv1htTHIB1g";
 const API_OP_CONTRACT = 'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&apikey=A7YUEGDPZD2DD2G784BNDKK1WZBBQP7D4X&address=';
 const CONTRACT_ADDR = "0x80fe12c1076d2b708D6495186690f6D275740D44";
+const IMG_HOST = "https://diewland.github.io/my-missing-jigsaw-assets";
+const IMG_UNREVEAL = `${IMG_HOST}/0_unreveal.png`;
 
 let web3 = new Web3(PROVIDER_OP);
 let url = API_OP_CONTRACT + CONTRACT_ADDR;
@@ -23,6 +25,7 @@ $.getJSON(url, data => {
 
 function freeze() {
   $('#wallet_addr').val('.....');
+  $('.img-thumbnail').attr('src', IMG_UNREVEAL);
   $('#btn-resolve').attr('disabled', true);
   $('#btn-resolve').removeClass('btn-info');
   $('#btn-resolve').addClass('btn-warning');
@@ -35,6 +38,25 @@ function unfreeze() {
   $('#jigsaw_id').focus();
 }
 
+// resolve logic
+let CODES = ['A626', 'A539', 'A54A', 'A22A', 'A323', 'A653', 'A121', 'A657', 'A129', 'B630', 'A146', 'A646', 'A53A', 'A529', 'A313', 'A713', 'A512', 'A523', 'A414', 'A132', 'A114', 'A232', 'B210', 'A151', 'A349', 'A732', 'A73A', 'A454', 'A651', 'B340', 'A415', 'A425', 'A344', 'A126', 'A658', 'A254', 'A112', 'A136', 'A639', 'A642', 'A144', 'A154', 'A742', 'B240', 'A737', 'A336', 'A451', 'A759', 'A446', 'A638', 'A115', 'A158', 'A351', 'A724', 'A226', 'B310', 'A23A', 'A329', 'B550', 'A259', 'A749', 'A458', 'A123', 'A735', 'A542', 'C100', 'B120', 'A718', 'A426', 'A521', 'A131', 'A628', 'A721', 'A345', 'A659', 'B110', 'A636', 'A439', 'B410', 'A751', 'A229', 'A448', 'A155', 'A221', 'A256', 'A217', 'A258', 'A128', 'A25A', 'A411', 'B710', 'A522', 'A533', 'A117', 'A551', 'A617', 'A339', 'A246', 'A731', 'A52A'];
+function resolve_img_url(jid) {
+  let c = CODES[jid];
+  return `${IMG_HOST}/${c}.png`;
+}
+function resolve_img(jid) {
+  let url = resolve_img_url(jid);
+  $('.img-thumbnail').attr('src', url);
+}
+function resolve_wallet_addr(jid) {
+  mmsjs.methods.ownerOf(jid).call().then(addr => {
+    unfreeze();
+    $('#wallet_addr').val(addr);
+  }).catch(msg => {
+    alert(msg);
+  });
+}
+
 // resolve button
 let latest_jid = null;
 $('#btn-resolve').click(_ => {
@@ -45,12 +67,8 @@ $('#btn-resolve').click(_ => {
   latest_jid = jid;
 
   freeze();
-  mmsjs.methods.ownerOf(jid).call().then(addr => {
-    unfreeze();
-    $('#wallet_addr').val(addr);
-  }).catch(msg => {
-    alert(msg);
-  });
+  resolve_img(jid);
+  resolve_wallet_addr(jid);
 });
 
 // bind enter
