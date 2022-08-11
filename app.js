@@ -35,7 +35,7 @@ function unfreeze() {
   $('#btn-resolve').attr('disabled', false);
   $('#btn-resolve').removeClass('btn-warning');
   $('#btn-resolve').addClass('btn-info');
-  $('#jigsaw_id').focus();
+  //$('#jigsaw_id').focus();
 }
 
 // resolve logic
@@ -44,9 +44,19 @@ function resolve_img_url(jid) {
   let c = CODES[jid];
   return `${IMG_HOST}/${c}.png`;
 }
+function load_img(url) {
+  let $thumb = $('.img-thumbnail');
+  let img = new Image();
+  img.onload = _ => {
+    $thumb[0].src = img.src;
+    //$thumb.css('opacity', '1');
+  }
+  img.src = url;
+  //$thumb.css('opacity', '0.5');
+}
 function resolve_img(jid) {
   let url = resolve_img_url(jid);
-  $('.img-thumbnail').attr('src', url);
+  load_img(url);
 }
 function resolve_wallet_addr(jid) {
   mmsjs.methods.ownerOf(jid).call().then(addr => {
