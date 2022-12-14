@@ -1,7 +1,7 @@
 const PROVIDER_OP = "https://opt-mainnet.g.alchemy.com/v2/MnmlgcGeD8FPWiy_0SHlubv1htTHIB1g";
 const API_OP_CONTRACT = 'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&apikey=A7YUEGDPZD2DD2G784BNDKK1WZBBQP7D4X&address=';
-const CONTRACT_ADDR = "0x76c9fb6ae4151e00bbdbf9B771CF84DE42a31636";
-const IMG_UNREVEAL = "https://fanbase-1.s3.amazonaws.com/quixotic-collection-profile/profile_MuHtSRm.gif";
+const CONTRACT_ADDR = "0x3b227fC544Ec74E192631D8CFfD536e854716062";
+const IMG_UNREVEAL = "https://i.seadn.io/gcs/files/27ff3b14123b4e3189f1b67c8ba38a95.gif?auto=format&w=750";
 
 let web3 = new Web3(PROVIDER_OP);
 let url = API_OP_CONTRACT + CONTRACT_ADDR;
@@ -39,8 +39,8 @@ function unfreeze() {
 
 // resolve logic
 function resolve_img_url(jid) {
-  //return `https://ipfs.io/ipfs/bafybeigdvfikmbvkvtfamfnpc7i4ytshmtjjvomnqavdgrrkzjafx6witm/${jid}.png`;
-  return `https://quixotic.infura-ipfs.io/ipfs/bafybeigdvfikmbvkvtfamfnpc7i4ytshmtjjvomnqavdgrrkzjafx6witm/${jid}.png`;
+  //return `https://ipfs.io/ipfs/bafybeiaokp4gsui2mo6mgk7q45acfdl72q6cc4bbqm4n4x2tr3atmnojmq/${jid}.png`;
+  return `https://quixotic.infura-ipfs.io/ipfs/bafybeiaokp4gsui2mo6mgk7q45acfdl72q6cc4bbqm4n4x2tr3atmnojmq/${jid}.png`;
 }
 function load_img(url) {
   let $thumb = $('.img-thumbnail');
