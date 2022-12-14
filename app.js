@@ -1,8 +1,68 @@
+// app config
 const PROVIDER_OP = "https://opt-mainnet.g.alchemy.com/v2/MnmlgcGeD8FPWiy_0SHlubv1htTHIB1g";
 const API_OP_CONTRACT = 'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&apikey=A7YUEGDPZD2DD2G784BNDKK1WZBBQP7D4X&address=';
 const CONTRACT_ADDR = "0x80fe12c1076d2b708D6495186690f6D275740D44";
 const IMG_HOST = "https://diewland.github.io/my-missing-jigsaw-assets";
 const IMG_UNREVEAL = `${IMG_HOST}/0_unreveal.png`;
+
+// collection config
+const COL_JIGSAW = "col_jigsaw";
+const COL_CRYPTO = "col_crypto";
+const COL_AIAPE  = "col_aiape";
+const COL_DRACO  = "col_draco";
+const COL_LIST = [
+  COL_JIGSAW,
+  COL_CRYPTO,
+  COL_AIAPE,
+  COL_DRACO,
+];
+const COL_CONFIG = {
+  [COL_JIGSAW]: {
+    title: "My Missing Jigsaw",
+    img: "https://diewland.github.io/my-missing-jigsaw-assets/0_unreveal.png",
+  },
+  [COL_CRYPTO]: {
+    title: "Crypto Art",
+    img: "https://quixotic.io/_next/image?url=https%3A%2F%2Ffanbase-1.s3.amazonaws.com%2Fquixotic-collection-profile%2Flogo_500x500.png&w=3840&q=75",
+  },
+  [COL_AIAPE]: {
+    title: "AI APE Club 🍷🔴",
+    img: "https://quixotic.io/_next/image?url=https%3A%2F%2Ffanbase-1.s3.amazonaws.com%2Fquixotic-collection-profile%2F110.jpeg&w=3840&q=75",
+  },
+  [COL_DRACO]: {
+    title: "Draconic Egg",
+    img: "https://quixotic.io/_next/image?url=https%3A%2F%2Ffanbase-1.s3.amazonaws.com%2Fquixotic-collection-profile%2Fdraconic-egg-512.png&w=3840&q=75",
+  },
+}
+
+// app state
+let processing = false;
+
+// render collections
+function render_collections() {
+  let html = '';
+  COL_LIST.forEach(key => {
+    let config = COL_CONFIG[key];
+    console.log(config.img);
+    html += `<div class="col"><img data-ref="${key}" class="collection img-thumbnail" src="${config.img}" /></div>`;
+  });
+  $('.collections').html(html);
+}
+function switch_contract(key) {
+  console.log(key);
+}
+$('body').on('click', '.collection', evt => {
+  if (processing) return;
+  let $target = $(evt.target);
+  $('.collection').css("background-color", "#FFF");
+  $('.collection').css("border-color", "#FFF");
+  $target.css("background-color", "yellow");
+  $target.css("border-color", "yellow");
+  let key = $target.attr('data-ref');
+  switch_contract(key);
+});
+render_collections();
+$('.collection').first().click();
 
 let web3 = new Web3(PROVIDER_OP);
 let url = API_OP_CONTRACT + CONTRACT_ADDR;
@@ -24,11 +84,13 @@ $.getJSON(url, data => {
 });
 
 function freeze() {
+  processing = true;
   $('#wallet_addr').val('.....');
-  $('.img-thumbnail').attr('src', IMG_UNREVEAL);
+  $('.preview.img-thumbnail').attr('src', IMG_UNREVEAL);
   $('#btn-resolve').attr('disabled', true);
   $('#btn-resolve').removeClass('btn-info');
   $('#btn-resolve').addClass('btn-warning');
+  $('.collection').css('opacity', '0.5');
 }
 function unfreeze() {
   $('#wallet_addr').val('');
@@ -36,6 +98,8 @@ function unfreeze() {
   $('#btn-resolve').removeClass('btn-warning');
   $('#btn-resolve').addClass('btn-info');
   //$('#jigsaw_id').focus();
+  $('.collection').css('opacity', '1');
+  processing = false;
 }
 
 // resolve logic
@@ -45,7 +109,7 @@ function resolve_img_url(jid) {
   return `${IMG_HOST}/${c}.png`;
 }
 function load_img(url) {
-  let $thumb = $('.img-thumbnail');
+  let $thumb = $('.preview.img-thumbnail');
   let img = new Image();
   img.onload = _ => {
     $thumb[0].src = img.src;
@@ -70,6 +134,7 @@ function resolve_wallet_addr(jid) {
 // resolve button
 let latest_jid = null;
 $('#btn-resolve').click(_ => {
+  if (processing) return;
   let jid = +$('#jigsaw_id').val();
 
   // prevent bomb
